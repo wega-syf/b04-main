@@ -12,6 +12,9 @@ yang dapat diakses oleh User dalam waktu yang tidak terbatas.
 bagi setiap User.
 * Meningkatkan efisiensi budgeting pelatihan pekerja.
 
+### Project Documentation
+Google Drive : https://docs.google.com/document/d/1as7HKXQ1Xmc4tORNtftF6bfMELl3duMRIN7tcAPsGyw/edit?usp=sharing
+
 ### Anggota Kelompok:
 - Muhammad Ihsan Al Farisi - 2006596693
 - Brev William Fiden Saragih - 2006596926
