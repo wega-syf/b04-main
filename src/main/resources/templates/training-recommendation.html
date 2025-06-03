@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Training Recommendation</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+    <h1 class="text">Training Recommendation</h1>
+    <div class="container">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+                <div class="justify-content-center">
+                    <table class="table table-paginate">
+                        <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Competency Level</th>
+                            <th class="text-center">Jumlah User</th>
+                            <th class="text-center">Training Recommendation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="trainingrec, iterationStatus : ${listTrainingRec}">
+                            <td th:text="${iterationStatus.count}" class="text-center"></td>
+                            <td class="text-center">
+                                <a th:text="${trainingrec.competencyLevel.idCompetency.nama} + ' (Level ' + ${trainingrec.competencyLevel.level} + ')'"
+                                   th:href="@{/training-recommendation/detail(idLevel=${trainingrec.competencyLevel.idLevel}, idEventPriod=${idEventPriod})}" style="color: black;"
+                                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                   onpointerleave="this.setAttribute('style', 'color: black;')"></a>
+                            </td>
+                            <td class="text-center">
+                                <a th:text="${trainingrec.jumlahUser}"
+                                   th:href="@{/training-recommendation/detail(idLevel=${trainingrec.competencyLevel.idLevel}, idEventPriod=${idEventPriod})}"
+                                   style="color: black;"
+                                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+                            </td>
+                            <td class="text-center">
+                                <p th:if="${trainingrec.listRekomendasiTraining.isEmpty()}">
+                                    Rekomendasi training tidak tersedia.
+                                </p>
+                               <div th:unless="${trainingrec.listRekomendasiTraining.isEmpty()}"
+                                   th:each="rec, iterationStatus2 : ${trainingrec.listRekomendasiTraining}">
+                                   <a th:text="${rec.nama}"
+                                      th:href="@{/training-recommendation/detail(idLevel=${trainingrec.competencyLevel.idLevel}, idEventPriod=${idEventPriod})}"
+                                      style="color: black;"
+                                      onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                      onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+                               </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <a th:href="@{/training-recommendation}"><button class="btn-hover-2 color-1">Kembali
+                    </button> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

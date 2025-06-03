@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Review Training</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <h3 th:text="'Review' + ' ' + ${trainingPlanModel.nama}"></h3>
+                    <!-- <h5>Overall rating: <span><strong th:text="${averageRating}"></strong></span></h5> -->
+                    <div th:unless="${averageRating == 0}">
+                        <h5>Overall rating: <span><strong th:text="${averageRating}"></strong></span></h5>
+                    </div>
+                    <div th:if="${averageRating == 0}">
+                        <h5>Overall rating: <span><strong>Belum ada review</strong></span></h5>
+                    </div>
+                   <div 
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table table-paginate">
+                        <thead>
+                            <tr>
+                                <th class="text-center">User</th>
+                                <th class="">Feedback</th>
+                                <th class="">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="reviewTraining, iterationStatus : ${listReviewTraining}">
+                                <td th:text="${reviewTraining.user.username}" class="text-center"></td>
+                                <td th:text="${reviewTraining.esaiFeedback}"></td>
+                                <td th:text="${reviewTraining.ratingAverage}"></td>
+                                <!-- <td>
+                                    <a th:text="${competencyModel.title.nama}"
+                                        th:href="@{/competency-model/} + ${competencyModel.idModel}"
+                                        style="color: black;"
+                                        onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                        onpointerleave="this.setAttribute('style', 'color: black;')"></a>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+
+</html>

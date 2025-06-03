@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Training Catalog</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+</head>
+
+<body>
+  <nav th:replace="fragments/fragment :: navbar"></nav>
+  <div class="Test">
+    <h1 class="text">Training Catalog</h1>
+    <div class="container">
+      <a  th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}" th:href="@{/training-catalog/add}"><button class="btn-hover color-1 add-training">+ Add Training</button> </a>
+      <div class="card m-4 p-4">
+        <div class="card-body">
+          <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+          <div class="justify-content-center">
+  <!-- <input class="form-control" id="myInput" type="text" placeholder="Search.."> -->
+  <table class="table table-paginate" cellspacing="0" width="100%">
+    <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Penyedia</th>
+                <th class="text-center">Deskripsi</th>
+              </tr>
+              </thead>
+              <tbody id="myTable">
+              <tr th:each="training, iterationStatus : ${listTraining}">
+                <td th:text="${iterationStatus.count}" class="text-center"></td>
+                <td>
+                  <a th:text="${training.nama}"
+                     th:href="@{/training-catalog/detail(trainingId=${training.trainingId})}"
+                     style="color: black;"
+                     onpointerenter="this.setAttribute('style', 'color: purple;')"
+                     onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+                </td>
+                <td th:text="${training.penyedia}"></td>
+                <td th:text="${training.deskripsi}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

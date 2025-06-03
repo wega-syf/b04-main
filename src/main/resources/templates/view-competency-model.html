@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Competency Model</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <!-- <div class="card-body"> -->
+                <div class="justify-content-center">
+
+                    <div class="row">
+                        <div class="col-10">
+                            <h2 th:text="${title.nama}"></h2>
+                        </div>
+                        <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+                        <div class="col-2">
+                            <a th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}"
+                               th:href="@{/competency-model/update/} + ${idModel}"><button
+                                    class="btn btn-sm btn-primary">Update</button></a>
+                            <button th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}"
+                                    type="button" class="btn btn-sm btn-outline-danger my-1" data-bs-toggle="modal"
+                                th:data-bs-target="'#my-modal-' + ${idModel}">
+                                Delete
+                            </button>
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'my-modal-' + ${idModel}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel"
+                                                th:text="'Hapus competency '+ ${title.nama} +' ?'"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p
+                                                th:text="'Apakah Anda yakin ingin menghapus Competency Model untuk ' + ${title.nama} + '?'">
+                                            </p>
+                                            <p>Anda tidak dapat mengembalikan data ini.</p>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Batal</button>
+                                            <a th:href="@{/competency-model/delete/} + ${idModel}"><button
+                                                    class="btn btn-danger">Ya, hapus secara permanen</button></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-2" style="font-weight: bold">Deskripsi</div>
+                        <div class="col-10" th:text="${deskripsi}"></div>
+                    </div>
+                    <hr>
+                    <h6 style="font-weight: bold">Berikut merupakan kompetensi yang dibutuhkan oleh <span
+                            th:text="${title.nama}"></span>:</h6>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Nama Kompetensi</th>
+                                <th class="text-center">Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="competencyLevel, iterationStatus : ${listCompetencyLevel}">
+                                <td th:text="${competencyLevel.idCompetency.nama}"></td>
+                                <td th:text="${competencyLevel.level}" class="text-center"></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <a th:href="@{/competency-model}"><button class="btn-hover-2 color-1">Kembali</button> </a>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>
+
+</html>

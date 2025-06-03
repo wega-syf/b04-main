@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>Assessment History</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+    <h1 class="text">Assessment History</h1>
+    <div style="margin-left: 43px;">
+        <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+        <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+    </div>
+    <div  th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}">
+            <div class="container">
+                <div class="card m-4 p-4">
+                    <form th:action="@{/history-assessment/admin-filter}" method="get">
+                    <div class="justify-content-center">
+                        <h3>Filter By</h3>
+                        <div class="row">
+                            <div class="col-3">
+                                Event Period
+                            </div>
+                            <div class="col-3">
+                                Assessor
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <select name="eventId" class="form-control" required>
+                                    <div >
+                                        <option value="" disabled selected>Pilih periode assessment</option>
+                                        <option th:each="period, iterationStatus2 : ${eventPeriodAssessmentList}" th:value="${period.idEventPriod}"
+                                                th:text="${period.periodName}">
+                                        </option>
+                                    </div>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select name="assessorUuid" class="form-control" >
+                                    <div>
+                                        <option value="" disabled selected>Pilih assessor</option>
+                                        <option th:each="assessor, iterationStatus2 : ${assessorListAll}" th:value="${assessor.accountUuid}"
+                                                th:text="${assessor.namaDepan} + ' ' +${assessor.namaBelakang}">
+                                        </option>
+                                    </div>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-2">
+                                <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    <a th:href="@{/history-assessment}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">View All</button></a>
+
+                </div>
+            </div>
+        <div class="container"  th:if="${assessmentListQuery}">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <h3 th:if="${selectedEvent} and ${selectedAssessor == null}" th:text="'Menampilkan berdasarkan period assessment: '+${selectedEvent.periodName}"></h3>
+                    <h3 th:unless="${selectedEvent} and ${selectedAssessor == null}" th:text="'Menampilkan berdasarkan period assessment: '+${selectedEvent.periodName}"></h3>
+                    <h3 th:unless="${selectedEvent} and ${selectedAssessor == null}" th:text="'dan berdasarkan assessor: '+${selectedAssessor.namaDepan}+' '+${selectedAssessor.namaBelakang}"></h3>
+                    <br>
+                    <tr th:if="${assessmentListQuery.isEmpty()}">
+                        <h5>
+                            Tidak terdapat assessment dengan filter ini
+                        </h5>
+                    </tr>
+                    <table class="table table-paginate" th:if="${assessmentListQuery}">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Assessor</th>
+                                <th class="text-center">User yang di assess</th>
+                                <th class="text-center">Title User</th>
+                                <th class="text-center">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <tr class="text-center" th:each="assessment, iterationstat : ${assessmentListQuery}">
+                                <td th:text="${iterationstat.count}"></td>
+                                <td th:text="${assessment.idAssess}"></td>
+                                <td th:text="${assessment.assessor.namaDepan} + ' '+${assessment.assessor.namaBelakang}"></td>
+                                <td th:text="${assessment.user.namaDepan}+' '+${assessment.user.namaBelakang}"></td>
+                                <td th:text="${assessment.user.titleModel.nama}"></td>
+                                <td> <a th:href="@{/history-assessment/detail/{id}(id=${assessment.idAssess})}">
+                                    <i class='bx bx-info-circle'></i>
+                                </a></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="container" th:unless="${assessmentListQuery}">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table table-paginate" >
+                        <h3> Menampilkan semua assessment </h3>
+                        <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Periode</th>
+                            <th class="text-center">Assessor</th>
+                            <th class="text-center">User yang di assess</th>
+                            <th class="text-center">Title User</th>
+                            <th class="text-center">Detail</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center" th:each="assessment, iterationstat : ${assessmentListAll}">
+                            <td th:text="${iterationstat.count}"></td>
+                            <td th:text="${assessment.idAssess}"></td>
+                            <td th:text="${assessment.event.periodName}"></td>
+                            <td th:text="${assessment.assessor.namaDepan} + ' '+${assessment.assessor.namaBelakang}"></td>
+                            <td th:text="${assessment.user.namaDepan}+' '+${assessment.user.namaBelakang}"></td>
+                            <td th:text="${assessment.user.titleModel.nama}"></td>
+                            <td> <a th:href="@{/history-assessment/detail/{id}(id=${assessment.idAssess})}">
+                                <i class='bx bx-info-circle'></i>
+                            </a></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('assessor')}">
+        <form th:action="@{/history-assessment/assessor-filter}" method="get">
+            <div class="container">
+                <div class="card m-4 p-4">
+                    <div class="justify-content-center">
+                        <h3>Filter By</h3>
+                        <div class="row">
+                            <div class="col-3">
+                                Event Period
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <select name="eventId" class="form-control" required>
+                                    <div >
+                                        <option value="" disabled selected>Pilih periode assessment</option>
+                                        <option th:each="period, iterationStatus2 : ${eventPeriodAssessmentList}" th:value="${period.idEventPriod}"
+                                                th:text="${period.periodName}">
+                                        </option>
+                                    </div>
+                                </select>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-2">
+                                <button class="btn btn-primary" type="submit" name="save">Search</button>
+                            </div>
+                            <div class="col-2">
+                                <a th:href="@{/history-assessment}"><button class="btn btn-secondary">View All</button></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="container" th:if="${assessmentListByAssessor} and ${assessmentListQueryAssessor == null}">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table table-paginate" >
+                        <h3> Menampilkan semua assessment yang telah anda lakukan </h3>
+                        <div class="row">
+                            <div class="col-2">
+                                Username Anda
+                            </div>
+                            <div class="col-10" th:text="${assessorModel.username}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                Nama Lengkap
+                            </div>
+                            <div class="col-10" th:text="${assessorModel.namaDepan}+' '+${assessorModel.namaBelakang}">
+                            </div>
+                        </div>
+                        <br>
+                        <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Periode</th>
+                            <th class="text-center">Assessor</th>
+                            <th class="text-center">User yang di assess</th>
+                            <th class="text-center">Title User</th>
+                            <th class="text-center">Detail</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center" th:each="assessment, iterationstat : ${assessmentListByAssessor}">
+                            <td th:text="${iterationstat.count}"></td>
+                            <td th:text="${assessment.idAssess}"></td>
+                            <td th:text="${assessment.event.periodName}"></td>
+                            <td th:text="${assessment.assessor.namaDepan} + ' '+${assessment.assessor.namaBelakang}"></td>
+                            <td th:text="${assessment.user.namaDepan}+' '+${assessment.user.namaBelakang}"></td>
+                            <td th:text="${assessment.user.titleModel.nama}"></td>
+                            <td> <a th:href="@{/history-assessment/detail/{id}(id=${assessment.idAssess})}">
+                                <i class='bx bx-info-circle'></i>
+                            </a></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container" th:if="${assessmentListQueryAssessor}">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table table-paginate" >
+                        <h3> Menampilkan assessment yang telah anda lakukan </h3>
+                        <h3 th:text="'berdasarkan periode ' + ${selectedEvent.periodName}">  </h3>
+                        <div class="row">
+                            <div class="col-2">
+                                Username Anda
+                            </div>
+                            <div class="col-10" th:text="${assessorModel.username}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                Nama Lengkap
+                            </div>
+                            <div class="col-10" th:text="${assessorModel.namaDepan}+' '+${assessorModel.namaBelakang}">
+                            </div>
+                        </div>
+                        <br>
+                        <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Periode</th>
+                            <th class="text-center">Assessor</th>
+                            <th class="text-center">User yang di assess</th>
+                            <th class="text-center">Title User</th>
+                            <th class="text-center">Detail</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center" th:each="assessment, iterationstat : ${assessmentListQueryAssessor}">
+                            <td th:text="${iterationstat.count}"></td>
+                            <td th:text="${assessment.idAssess}"></td>
+                            <td th:text="${assessment.event.periodName}"></td>
+                            <td th:text="${assessment.assessor.namaDepan} + ' '+${assessment.assessor.namaBelakang}"></td>
+                            <td th:text="${assessment.user.namaDepan}+' '+${assessment.user.namaBelakang}"></td>
+                            <td th:text="${assessment.user.titleModel.nama}"></td>
+                            <td> <a th:href="@{/history-assessment/detail/{id}(id=${assessment.idAssess})}">
+                                <i class='bx bx-info-circle'></i>
+                            </a></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+
+</body>
+</html>

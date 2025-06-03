@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Training Plan</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+  <nav th:replace="fragments/fragment :: navbar"></nav>
+  <div class="Test">
+    <div class="container">
+      <div class="card m-4 p-4">
+        <!-- <div class="card-body"> -->
+        <div class="justify-content-center">
+          <div class="row">
+            <div class="col-10">
+              <h2 th:text="'Training' + ' ' + ${idTraining.nama}"></h2>
+            </div>
+            <div th:if="${successtext} "
+              th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-2" style="font-weight: bold">Nama</div>
+            <div class="col-10" th:text="${nama}"></div>
+          </div>
+          <div class="row">
+            <div class="col-2" style="font-weight: bold">Deskripsi</div>
+            <div class="col-10" th:text="${deskripsi}"></div>
+          </div>
+          <div class="row">
+            <div class="col-2" style="font-weight: bold">Tanggal Mulai</div>
+            <div class="col-10" th:text="${#temporals.format(dateStart, 'dd MMMM yyyy')}"></div>
+          </div>
+          <div class="row">
+            <div class="col-2" style="font-weight: bold">Tanggal Selesai</div>
+            <div class="col-10" th:text="${#temporals.format(dateEnd, 'dd MMMM yyyy')}"></div>
+          </div>
+          <div class="row">
+            <div class="col-2" style="font-weight: bold">Status</div>
+            <div class="col-10" th:switch="${status}">
+              <td th:case="1">
+                <p class="status1">Confirmed</p>
+              </td>
+              <td th:case="2">
+                <p class="status2">Active</p>
+              </td>
+              <td th:case="3">
+                <p class="status3">Done</p>
+              </td>
+              <!-- * for default case -->
+              <td th:case="*">
+                <p class="status0">In Review</p>
+              </td>
+            </div>
+          </div>
+          <br>
+          <a th:href="@{/dashboard}">
+            <button class="btn-hover-2 color-1">Kembali</button>
+          </a>
+          <a th:if="${status == 3 and review == null}" th:href="@{/review-training/} + ${idTraining.trainingId}">
+            <button class="btn-hover-2 color-1">Review Training</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+
+</html>

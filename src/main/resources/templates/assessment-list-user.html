@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Competency Assessment</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Competency Assessment</h1>
+  <br>
+  <div class="buttons" style="margin-left: 43px;">
+
+    <div th:unless="${activeAssessmentPeriod}" class="container">
+      <div class="card m-2 p-4">
+        <div class="card-body">
+          <div class="justify-content-center">
+            <h2>
+              Periode assessment belum aktif. Silahkan cek lagi di lain waktu. Jika memiliki pertanyaan, silahkan hubungi administrator
+            </h2>
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+  <div th:if="${activeAssessmentPeriod}" class="container">
+
+    <div class="card m-2 p-4">
+      <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+      <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+      <div class="card-body">
+        <div class="justify-content-center">
+          <h2 th:if="${eventPeriod}" th:text="'Periode Assessment: '+ ${eventPeriod.periodName}"></h2>
+          <br>
+          <h4>List User</h4>
+
+          <br>
+          <div th:unless="${listuserToAssess}">
+            Tidak ada user yang dapat diassess untuk periode ini
+          </div>
+          <table th:if="${listuserToAssess}" class="table table-paginate">
+            <thead>
+            <tr>
+              <th class="text-center">Username</th>
+              <th class="text-center">Nama Lengkap</th>
+              <th class="text-center">Divisi</th>
+              <th class="text-center">Title</th>
+              <th class="text-center">Jenis Kelamin</th>
+
+              <th class="text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${listuserToAssess != null}"  class="text-center" th:each="user, iterationStatus : ${listuserToAssess}">
+              <td th:text="${user.username}"></td>
+              <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+              <td th:text="${user.divisiModel.nama}"></td>
+              <td th:text="${user.titleModel.nama}"></td>
+              <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+
+              <td>
+                <a th:href="@{/do-assessment/} + ${user.accountUuid}"><button class="btn btn-primary">Select</button></a>
+              </td>
+            </tr>
+            <tr th:if="${listuserDone != null}"  class="text-center" th:each="user, iterationStatus : ${listuserDone}">
+              <td th:text="${user.username}"></td>
+              <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+              <td th:text="${user.divisiModel.nama}"></td>
+              <td th:text="${user.titleModel.nama}"></td>
+              <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+
+              <td>
+                Sudah diassess
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Management</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+    <h1 class="text">Manajemen Akun</h1>
+    <div class="buttons" style="margin-left: 43px;">
+        <h5>Tampilkan berdasarkan Role</h5>
+        <br>
+        <a th:href="@{/account-management/}"  style="text-decoration:none"><button class="btn-hover-2" th:classappend="${status.equals('all')} ? 'color-2':'color-1'" type="button">All</button></a>
+        <a  th:href="@{/account-management/admin/}"  style="text-decoration:none"><button class="btn-hover-2" th:classappend="${status.equals('admin')} ? 'color-2':'color-1'"  type="button">Admin</button></a>
+        <a  th:href="@{/account-management/executive/}"  style="text-decoration:none"><button class="btn-hover-2" th:classappend="${status.equals('executive')} ? 'color-2':'color-1'"  type="button">Executive</button></a>
+        <a  th:href="@{/account-management/assessor/}"  style="text-decoration:none"><button class="btn-hover-2" th:classappend="${status.equals('assessor')} ? 'color-2':'color-1'"  type="button">Assessor</button></a>
+        <a  th:href="@{/account-management/user/}"  style="text-decoration:none"><button class="btn-hover-2" th:classappend="${status.equals('user')} ? 'color-2':'color-1'"  type="button">User</button></a>
+    </div>
+    <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+    <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+    <br>
+<div class="container">
+    <div class="card m-2 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <div class="justify-content-between">
+                    <h3 th:if="${status.equals('all')}" th:text="'Terdapat '+ ${size}+ ' akun pada sistem.'"></h3>
+                    <h3 th:unless="${status.equals('all')}" th:text="'Terdapat '+ ${size}+ ' akun pada sistem dari role ini.'"></h3> <br>
+                    <a th:href="@{/register}"><button type="button" class="btn btn-outline-primary">+ Tambahkan akun baru</button></a>
+                </div>
+                <br> <br>
+                <table class="table table-paginate">
+                    <thead>
+                    <tr>
+<!--                        <th class="text-center">No</th>-->
+                        <th class="text-center">Edit</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Jenis Kelamin</th>
+                        <th class="text-center">Role</th>
+                        <th class="text-center">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr th:if="${listAdmin != null}"  class="text-center" th:each="user, iterationStatus : ${listAdmin}">
+<!--                        <form method="post" th:action="@{/account-management/delete/{uuid}(uuid=${user.accountUuid})}" th:object="${listAdmin[__${iterationStatus.index}__]}">-->
+<!--                        <td th:text="${iterationStatus.count}"></td>-->
+                        <td>
+                            <a th:href="@{/account-management/edit/{uuid}(uuid=${user.accountUuid})}">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+                        <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+<!--                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#confirmationModalAdmin' + ${user.accountUuid}" >Delete</button>-->
+<!--                            <a class="btn btn-outline-danger" th:href="@{/account-management/delete/admin/} + ${user.accountUuid}">Delete this account</a>-->
+                            <!-- Button to trigger the modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${user.accountUuid}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'my-modal-' + ${user.accountUuid}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" th:text="'Hapus akun '+${user.username} +' ?'"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p th:text="'Apakah yakin anda akan menghapus akun dengan nama'"></p>
+                                            <p th:text="${user.namaDepan}+' '+${user.namaBelakang} + '?'"></p>
+                                            <p>Anda tidak dapat mengembalikan akun ini.</p>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <a th:href="@{/account-management/delete/admin/} + ${user.accountUuid}"><button class="btn btn-danger">Ya, hapus secara permanen</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                            <!-- <div class="modal fade" th:id="'#confirmationModalAdmin' + ${user.accountUuid}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmation to delete</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you're going to delete this Admin account permanently? There is no going back.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a class="btn btn-sm btn-danger my-1" th:href="@{/account-management/delete/} + ${user.accountUuid}">"Yes, delete this account</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+<!--                        </form>-->
+                    </tr>
+                    <tr th:if="${listAssessor != null}"  class="text-center" th:each="user, iterationStatus : ${listAssessor}">
+<!--                        <td th:text="${iterationStatus.count}"></td>-->
+                        <td>
+                            <a th:href="@{/account-management/edit/{uuid}(uuid=${user.accountUuid})}">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+                        <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <!-- Button to trigger the modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${user.accountUuid}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'my-modal-' + ${user.accountUuid}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" th:text="'Hapus akun '+${user.username} +' ?'"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p th:text="'Apakah yakin anda akan menghapus akun dengan nama'"></p>
+                                            <p th:text="${user.namaDepan}+' '+${user.namaBelakang} + '?'"></p>
+                                            <p>Anda tidak dapat mengembalikan akun ini.</p>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <a th:href="@{/account-management/delete/assessor/} + ${user.accountUuid}"><button class="btn btn-danger">Ya, hapus secara permanen</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${listExecutive != null}"  class="text-center" th:each="user, iterationStatus : ${listExecutive}">
+<!--                        <td th:text="${iterationStatus.count}"></td>-->
+                        <td>
+                            <a th:href="@{/account-management/edit/{uuid}(uuid=${user.accountUuid})}">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+                        <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <!-- Button to trigger the modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${user.accountUuid}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'my-modal-' + ${user.accountUuid}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" th:text="'Hapus akun '+${user.username} +' ?'"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p th:text="'Apakah yakin anda akan menghapus akun dengan nama'"></p>
+                                            <p th:text="${user.namaDepan}+' '+${user.namaBelakang} + '?'"></p>
+                                            <p>Anda tidak dapat mengembalikan akun ini.</p>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <a th:href="@{/account-management/delete/executive/} + ${user.accountUuid}"><button class="btn btn-danger">Ya, hapus secara permanen</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${listUser != null}"  class="text-center" th:each="user, iterationStatus : ${listUser}">
+<!--                        <td th:text="${iterationStatus.count}"></td>-->
+                        <td>
+                            <a th:href="@{/account-management/edit/{uuid}(uuid=${user.accountUuid})}">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.namaDepan}+ ' '+${user.namaBelakang}"></td>
+                        <td th:text="${user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <!-- Button to trigger the modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${user.accountUuid}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'my-modal-' + ${user.accountUuid}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" th:text="'Hapus akun '+${user.username} +' ?'"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p th:text="'Apakah yakin anda akan menghapus akun dengan nama'"></p>
+                                            <p th:text="${user.namaDepan}+' '+${user.namaBelakang} + '?'"></p>
+                                            <p>Anda tidak dapat mengembalikan akun ini.</p>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <a th:href="@{/account-management/delete/user/} + ${user.accountUuid}"><button class="btn btn-danger">Ya, hapus secara permanen</button></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+</html>

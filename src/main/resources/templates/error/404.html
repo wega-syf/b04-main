@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+  <meta charset="UTF-8">
+    <title>Not Found</title>
+</head>
+<body>
+<div class="Test">
+  <div class="card m-4 p-4">
+    <div class="card-body">
+      <div class="justify-content-center">
+        <h1>
+          Halaman tidak ditemukan
+        </h1>
+        <hr class="my-4">
+
+        <h6>
+          Silahkan kembali ke halaman sebelumnya.<br> Mohon maaf atas ketidaknyamanannya
+        </h6>
+        <br>
+        <a th:href="@{/}"><button type="button" class="btn btn-outline-primary">Kembali</button></a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+</html>

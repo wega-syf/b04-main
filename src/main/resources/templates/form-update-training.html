@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Update Training</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <div class="card m-4 p-4">
+    <div class="card-body">
+      <div class="justify-content-center">
+        <h2>Update Training</h2>
+        <br>
+        <form th:action="@{/training-catalog/update}" th:object="${training}" method="POST">
+          <input type="hidden" th:field="*{trainingId}" />
+
+          Nama Training: <br>
+          <input class="form-control" type="text" name="nama" th:value="*{nama}"/>
+          <br><br>
+
+          Deskripsi: <br>
+          <input class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
+          <br><br>
+
+          Penyedia: <br>
+          <input class="form-control" type="text" name="penyedia" th:value="*{penyedia}" />
+          <br><br>
+
+          <table class="table">
+            <thead>
+            <th>Competency</th>
+            <th>Level</th>
+            <th>
+              <button class="btn btn-primary" type="submit" name="addRow">Tambah Row</button>
+            </th>
+            </thead>
+            <tbody>
+            <tr th:each="compLevel, iterationStatus : *{levelOfTraining}">
+              <td th:if="*{levelOfTraining[__${iterationStatus.index}__].idCompetency != null}">
+                <select name="idComp" th:field="*{levelOfTraining[__${iterationStatus.index}__].idCompetency}" class="form-control">
+                  <div th:each="compAvailable, iterationStatus2 : ${listCompAvailable}">
+                    <option
+                            th:value="${compAvailable.idComp}"
+                            th:text="${compAvailable.nama}"
+                            th:selected="(${compAvailable.idComp} == *{levelOfTraining[__${iterationStatus.index}__].idCompetency.idComp})">
+                    </option>
+                  </div>
+                </select>
+              </td>
+              <td th:if="*{levelOfTraining[__${iterationStatus.index}__].idCompetency == null}">
+                <select name="idComp" th:field="*{levelOfTraining[__${iterationStatus.index}__].idCompetency}" class="form-control">
+                  <div th:each="compAvailable, iterationStatus2 : ${listCompAvailable}">
+                    <option th:value="${compAvailable.idComp}" th:text="${compAvailable.nama}"></option>
+                  </div>
+                </select>
+              </td>
+              <td>
+                <input class="form-control" type="number" min="1" max="5" th:field="*{levelOfTraining[__${iterationStatus.index}__].level}" />
+              </td>
+              <td>
+                <button th:value="${iterationStatus.index}" class="btn btn-danger" type="submit"
+                        name="deleteRow">Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <a th:href="@{/training-catalog}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+
+          <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

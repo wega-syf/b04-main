@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Competency Model</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <h2>Update Competency Model</h2>
+                        <br>
+                        <form th:action="@{/competency-model/update}" th:object="${competencyModel}" method="POST">
+                            <input type="hidden" th:field="*{idModel}" />
+
+                            Title: <br>
+                            <input class="form-control" type="text" th:value="*{title.nama}" disabled />
+                            <input type="hidden" th:field="*{title.idTitle}" />
+                            <br>
+
+                            Deskripsi: <br>
+                            <input class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}" required/>
+                            <br>
+
+                            <table class="table">
+                                <thead>
+                                    <th>Competency</th>
+                                    <th>Level</th>
+                                    <th>
+                                        <button class="btn btn-outline-primary" type="submit" name="addRow">Tambah Competency</button>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="compLevel, iterationStatus : *{listCompetencyLevel}">
+                                        <td
+                                            th:if="*{listCompetencyLevel[__${iterationStatus.index}__].idCompetency != null}">
+                                            <select name="idComp"
+                                                th:field="*{listCompetencyLevel[__${iterationStatus.index}__].idCompetency}"
+                                                class="form-control">
+                                                <div th:each="competencyExisting, iterationStatus2 : ${listCompetencyExisting}">
+                                                    <option th:value="${competencyExisting.idComp}"
+                                                        th:text="${competencyExisting.nama}"
+                                                        th:selected="(${competencyExisting.idComp} == *{listCompetencyLevel[__${iterationStatus.index}__].idCompetency.idComp})">
+                                                    </option>
+                                                </div>
+                                            </select>
+                                        </td>
+                                        <td
+                                            th:if="*{listCompetencyLevel[__${iterationStatus.index}__].idCompetency == null}">
+                                            <select name="idComp"
+                                                th:field="*{listCompetencyLevel[__${iterationStatus.index}__].idCompetency}"
+                                                class="form-control">
+                                                <div th:each="competencyExisting, iterationStatus2 : ${listCompetencyExisting}">
+                                                    <option th:value="${competencyExisting.idComp}"
+                                                        th:text="${competencyExisting.nama}"></option>
+                                                </div>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" type="number"  min="1" max="5"
+                                                th:field="*{listCompetencyLevel[__${iterationStatus.index}__].level}" required/>
+                                        </td>
+                                        <td>
+                                            <button th:value="${iterationStatus.index}" class="btn btn-danger"
+                                                type="submit" name="deleteRow">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <a th:href="@{/competency-model/} + ${competencyModel.idModel}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+                            <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

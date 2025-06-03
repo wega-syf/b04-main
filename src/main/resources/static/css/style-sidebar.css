@@ -1,0 +1,21 @@
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background: linear-gradient(180deg, rgba(37,43,111,1) 30%, rgba(75,36,71,0.79) 100%);    padding: 6px 14px;
+}
+
+.sidebar .logo-details{
+    color: #fff;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    left: 10%;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+}
+

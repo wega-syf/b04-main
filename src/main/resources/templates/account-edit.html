@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Account Edit</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+
+    <div class="Test">
+        <div class="container">
+            <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+            <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+            <h1 class="text">Detail Akun</h1>
+            <div class="" style="margin-left: 43px;">
+                <h5>Lihat atau ubah detail akun</h5>
+            </div>
+            <br>
+            <div th:if="${modelAkun} != null">
+                <div class="container">
+                    <div class="card m-2 p-4">
+                        <div class="card-body">
+                            <div class="justify-content-around">
+                                <form method="post"
+                                    th:action="@{/account-management/edit/submit/{uuid}(uuid=${modelAkun.accountUuid})}"
+                                    th:object="${modelAkun}">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <h5>UUID</h5>
+                                            </td>
+                                            <td>
+                                                <p th:text="${modelAkun.getAccountUuid()}"></p>
+                                                <p th:text="'*UUID tidak dapat diubah secara manual'"></p>
+
+                                            </td>
+                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Username</h5>
+                                                </td>
+                                                <td>
+                                                    <input required class="form-control" type="text"
+                                                        th:value="*{username}" th:field="*{username}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Nama Depan</h5>
+                                                </td>
+                                                <td>
+                                                    <input required class="form-control" type="text"
+                                                        th:value="*{namaDepan}" th:field="*{namaDepan}" />
+                                                    <!--                                    <p th:text="${modelAkun.getNamaDepan()}"></p>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Nama Belakang</h5>
+                                                </td>
+                                                <td>
+                                                    <input required class="form-control" type="text"
+                                                        th:value="*{namaBelakang}" th:field="*{namaBelakang}" />
+                                                    <!--                                    <p th:text="${modelAkun.getNamaBelakang()}"></p>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Email</h5>
+                                                </td>
+                                                <td>
+                                                    <input required class="form-control" type="text" th:value="*{email}"
+                                                        th:field="*{email}" />
+                                                    <!--                                    <p th:text="${modelAkun.getEmail()}"></p>-->
+                                                </td>
+                                            </tr>
+                                            <!--                            <tr>-->
+                                            <!--                                <td>-->
+                                            <!--                                    <h5>Password</h5>-->
+                                            <!--                                    <br>-->
+                                            <!--                                    <p>*kosongkan agar password tidak berubah</p>-->
+                                            <!--                                </td>-->
+                                            <!--                                <td>-->
+                                            <input class="form-control" type="hidden" th:field="*{password}"
+                                                th:value="*{password}" />
+                                            <!--                                    &lt;!&ndash; <p th:text="${modelAkun.getRole()}"></p>&ndash;&gt;-->
+                                            <!--                                </td>-->
+                                            <!--                            </tr>-->
+                                            <tr>
+                                                <td>
+                                                    <h5>Nomor Telepon</h5>
+                                                </td>
+                                                <td>
+                                                    <input required class="form-control" type="text"
+                                                        th:value="*{noTelepon}" th:field="*{noTelepon}" />
+                                                    <!--                                    <p th:text="${modelAkun.getNoTelepon()}"></p>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Tanggal Lahir</h5>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="tanggalLahir"
+                                                        th:field="*{tanggalLahir}" th:value="*{tanggalLahir}"
+                                                        class="form-control mb-1" placeholder="Date of Birth"
+                                                        required><!--                                    <p th:text="${modelAkun.getNoTelepon()}"></p>-->
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <h5>Jenis Kelamin</h5>
+                                                    <!--                                    <h6 th:text="${#httpServletRequest.getAuthType().toString()}"></h6>-->
+                                                </td>
+                                                <td>
+                                                    <select name="jenisKelamin" th:field="*{jenisKelamin}"
+                                                        th:value="*{jenisKelamin}" class="form-select mb-1" required>
+                                                        <!--                                        <option th:value='nan' disabled selected>Select Gender</option>-->
+                                                        <option th:value=1 th:text="Male"></option>
+                                                        <option th:value=0 th:text="Female"></option>
+                                                    </select>
+                                                    <!--                                    <p th:text="${modelAkun.getJenisKelamin()?'Laki-laki':'Perempuan'}"></p>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Role</h5>
+                                                </td>
+                                                <td>
+                                                    <select th:unless="${loggedInAccountWarning}" name="role"
+                                                        th:field="*{role}" th:value="*{role}" class="form-select mb-1"
+                                                        required>
+                                                        <option th:value="admin" th:text="Admin"></option>
+                                                        <option th:value="executive" th:text="Executive"></option>
+                                                        <option th:value="assessor" th:text="Assessor"></option>
+                                                        <option th:value="user" th:text="User"></option>
+                                                    </select>
+                                                    <input th:if="${loggedInAccountWarning}" readonly
+                                                        class="form-control" type="text" th:value="*{role}"
+                                                        th:field="*{role}" />
+                                                    <br>
+                                                    <p th:if="${loggedInAccountWarning}">
+                                                        Role tidak dapat diubah karena akun sedang digunakan
+                                                    <p th:if="${defaultAccountWarning}">
+                                                        Role tidak dapat diubah karena merupakan akun default admin
+                                                    </p>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Divisi</h5>
+                                                </td>
+                                                <td>
+                                                    <select th:field="*{divisiModel.idDivisi}"
+                                                        th:value="*{divisiModel.idDivisi}" class="form-select mb-1"
+                                                        required>
+                                                        <option th:each="divisi : ${listDivisi}"
+                                                            th:value="${divisi.idDivisi}" th:text="${divisi.nama}">
+                                                        </option>
+                                                    </select>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5>Title</h5>
+                                                </td>
+                                                <td>
+                                                    <select th:field="*{titleModel.idTitle}"
+                                                        th:value="*{titleModel.idTitle}" class="form-select" required>
+                                                        <option th:each="title : ${listTitle}"
+                                                            th:value="${title.idTitle}" th:text="${title.nama}">
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <input th:value="${modelAkun.getUsername()}" type="hidden" name="currentUsername">
+                                    <div class="row">
+                                    </div>
+                                    <button th:value="${modelAkun.getRole()}" class="btn-hover-2 color-2" type="submit"
+                                            name="currentRole">Simpan</button>
+                                    <!--                                    <input type="submit" style="text-decoration:none" class="btn-hover color-1" name="currentRow" value="Simpan Perubahan">-->
+                                </form>
+
+
+                                <a th:href="@{/account-management}"
+                                   style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>
+                </h2>
+            </div>
+            <br>
+        </div>
+
+    </div>
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

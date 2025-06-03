@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Update Training</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container Test">
+  <div class="card m-4 p-4">
+    <div class="card-body">
+      <div class="justify-content-center">
+        <h2>Update Competency</h2>
+        <br>
+        <form th:action="@{/comp-dict/update}" th:object="${competency}" method="POST">
+          <input type="hidden" th:field="*{idComp}" />
+
+          Nama Training: <br>
+          <input class="form-control" type="text" name="nama" th:value="*{nama}"/>
+          <br><br>
+
+          Deskripsi: <br>
+          <input class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
+          <br><br>
+
+          <table class="table">
+            <thead>
+            <th>Level</th>
+            <th>Deskripsi</th>
+            </thead>
+            <tbody>
+            <tr th:each="compLevel, iterationStatus : *{competencyModelList}">
+              <td th:text="${iterationStatus.count}"></td>
+
+              <td>
+                <input type="hidden" th:field="*{competencyModelList[__${iterationStatus.index}__].idLevel}" />
+                <input class="form-control" type="text" name="deskripsi_level" th:field="*{competencyModelList[__${iterationStatus.index}__].deskripsi}"/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <a th:href="@{/comp-dict}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+          <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

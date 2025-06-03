@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Review Training</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <h1 class="text">Review Training</h1>
+
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <h3 th:text="'Review untuk Training' + ' ' + ${trainingPlanModel.idTraining.nama}"></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <div th:if="${errortext} "
+                            th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+                        <form th:action="@{/review-training/} + ${trainingPlanModel.idTrainingPlan}"
+                            th:object="${reviewTrainingModel}" method="POST">
+                            <input type="hidden" th:field="*{dateWritten}" th:value="*{dateWritten}" />
+                            <input type="hidden" th:field="*{user}" th:value="*{user}" />
+
+                            <div>
+                                <p>Silakan mengisi formulir berikut ini dengan nyaman, jujur, dan terbuka. Mohon
+                                    diperhatikan bahwa setiap isian (<i>termasuk radio button</i>) harus diisi.</p>
+                                <p>Pilihan penilaian yang bersifat terstruktur dengan cara memilih kategori penilian
+                                    yang sudah tersedia dari 1 hingga 5:</p>
+                                <ol>
+                                    <li><b>Sangat Tidak Setuju,</b> bila kenyataan di lapangan <u>sangat tidak
+                                            sesuai</u> dengan komponen yang dinilai</li>
+                                    <li><b>Tidak Setuju,</b> bila kenyataan di lapangan <u>tidak sesuai</u> dengan
+                                        komponen yang dinilai</li>
+                                    <li><b>Netral,</b> bila kenyataan di lapangan <u>netral</u> dengan komponen yang
+                                        dinilai</li>
+                                    <li><b>Setuju,</b> bila kenyataan di lapangan <u>sesuai</u> dengan komponen yang
+                                        dinilai</li>
+                                    <li><b>Sangat Setuju,</b> bila kenyataan di lapangan <u>sangat sesuai</u> dengan
+                                        komponen yang dinilai</li>
+                                </ol>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Pertanyaan</th>
+                                        <th class="text-center">Level</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>Training yang diberikan sesuai dengan kompetensi yang dibutuhkan</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q1} th:id="'inlineRadio' + ${level}+ '_q1'">
+                                                <label class="form-check-label" th:for="'inlineRadio'+${level}+'_q1'"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Training yang diberikan mampu meningkatkan kompetensi saat ini</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q2}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Training yang diberikan dapat meningkatkan kinerja saat bekerja</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q3}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Training diselenggarakan dengan tertib dan teratur</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q4}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Proses pelaksanaan training dari awal hingga akhir terasa mudah</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q5}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Waktu pelaksanaan setiap sesi pada training terjadwal dengan baik</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q6}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Media dan teknologi yang digunakan pada training dimanfaatkan dengan baik
+                                        </td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q7}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fasilitas yang disediakan saat training sudah memadai</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q8}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pemateri mendorong peserta untuk aktif berpartisipasi selama training</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q9}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pemateri dapat menyampaikan materi dengan metode yang efektif</td>
+                                        <td>
+                                            <div th:each="level, iterationj : ${#numbers.sequence(1, 5)}"
+                                                class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:value="${level}"
+                                                    th:field=*{q10}
+                                                    th:id="'inlineRadio'+${level}+' '+${#ids.seq('radio')}">
+                                                <label class="form-check-label"
+                                                    th:for="'inlineRadio'+${level}+' '+${#ids.seq('radio')}"
+                                                    th:text="${level}"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="row">
+                                <strong>Feedback terkait training yang telah
+                                    dilakukan</strong><br><br>
+                                <input type="text" placeholder="Berikan masukan di sini" class="form-field" th:field="*{esaiFeedback}" required />
+                            </div>
+                            <tr>
+                                <button class="btn btn-primary" type="submit" name="save">Submit</button>
+                                <a th:href="@{/dashboard/} + ${trainingPlanModel.idTrainingPlan}">
+                                    <input type="button" class="btn btn-secondary" value="Back">
+                                </a>
+                            </tr>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+
+</html>

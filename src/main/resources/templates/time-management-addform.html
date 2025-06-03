@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Event</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container Test">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Add New Event</h2>
+                <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+                <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+                <br>
+                <form th:action="@{/time-management/add}" th:object="${eventPeriodModel}" method="post">
+                    Nama Periode
+                    <input type="text" name="periodName" class="form-control mb-1" placeholder="Masukkan nama" required>
+
+                    Tanggal Mulai<br>
+                    *Pada tanggal ini, event akan otomatis aktif dan semua event lain akan ternonaktifkan
+                    <input type="date" name="dateStart" class="form-control mb-1"  required>
+                    Tanggal Selesai
+                    <input type="date" name="dateEnd" class="form-control mb-1" required>
+
+                    Deskripsi
+                    <input type="text" name="deskripsi" class="form-control mb-1" placeholder="Masukkan deskripsi" required>
+
+                    Jenis Event
+                    <select name="jenis"
+                            class="form-select mb-1" required >
+                        <!--                                        <option th:value='nan' disabled selected>Select Gender</option>-->
+                        <option th:value="'assessment'" th:text="'Assessment Event'"></option>
+                        <option th:value="'training'" th:text="'Training Event'"></option>
+                    </select>
+                    <a th:href="@{/time-management}">
+                        <input type="button" class="btn btn-secondary" value="Back">
+                    </a>
+                    <button class="btn btn-primary" type="submit" name="save">Submit</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+</html>

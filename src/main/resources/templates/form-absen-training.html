@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Absensi Training</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container Test">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2 th:text="'Absensi Training' + ' ' + ${trainingPlan.nama}"></h2>
+                <br>
+                <form th:action="@{/training-plan/{id}/absensi(id=${trainingPlan.idTrainingPlan})}" th:object="${trainingPlan}" method="POST">
+
+                    <table class="table">
+                            <thead>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Nama</th>
+                            <th>Kehadiran</th>
+                            </thead>
+                            <tbody>
+                            <tr th:each="trainingTaken, iterationStatus : *{userInTrainingPlan}">
+                                <td th:text="${iterationStatus.count}"></td>
+                                <td th:text="${trainingTaken.userModel.username}"></td>
+                                <td th:text="${trainingTaken.userModel.namaDepan} + ' ' + ${trainingTaken.userModel.namaBelakang}"></td>
+                                <td>
+                                    <label>
+                                        <select name="status"
+                                                th:field="*{userInTrainingPlan[__${iterationStatus.index}__].status}"
+                                                class="form-control" required>
+                                                <option th:value="absen" th:text="Absen"></option>
+                                                <option th:value="hadir" th:text="Hadir"></option>
+                                                <option th:value="izin" th:text="Izin"></option>
+                                        </select>
+                                    </label>
+                                </td>
+                                <input type="hidden" th:field="*{userInTrainingPlan[__${iterationStatus.index}__].idTrainingPlanTakenUser}" th:value="*{userInTrainingPlan[__${iterationStatus.index}__].idTrainingPlanTakenUser}">
+                                <input type="hidden" th:field="*{userInTrainingPlan[__${iterationStatus.index}__].trainingPlan}" th:value="*{userInTrainingPlan[__${iterationStatus.index}__].trainingPlan}">
+                                <input type="hidden" th:field="*{userInTrainingPlan[__${iterationStatus.index}__].userModel}" th:value="*{userInTrainingPlan[__${iterationStatus.index}__].userModel}">
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a th:href="@{/training-plan}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+                        <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

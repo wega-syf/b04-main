@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Training Plan</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <h2>Update Training Plan</h2>
+                        <br>
+                        <form th:action="@{/training-plan/update/}" th:object="${trainingPlanModel}" method="POST">
+                            <input type="hidden" th:field="*{idTrainingPlan}" th:value="*{idTrainingPlan}" />
+                            <input type="hidden" th:field="*{status}" th:value="*{status}" />
+
+                            Training <br>
+                            <input class="form-control" type="text" th:value="*{idTraining.nama}" disabled />
+                            <input type="hidden" th:field="*{idTraining.trainingId}" />
+                            <br>
+
+                            Event <br>
+                            <input class="form-control" type="text" th:value="*{eventPeriodModel.periodName}" disabled />
+                            <input type="hidden" th:field="*{eventPeriodModel}" th:value="*{eventPeriodModel}" />
+                            <br>
+
+                            Nama: <br>
+                            <input class="form-control" type="text" name="nama" th:value="*{nama}" th:field="*{nama}" required/>
+                            <br>
+
+                            Deskripsi: <br>
+                            <input class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}" th:field="*{deskripsi}" required/>
+                            <br>
+
+                            Tanggal Mulai: <br>
+                            <input class="form-control" type="date" name="tanggalMulai" th:value="*{dateStart}" th:field="*{dateStart}" required/>
+                            <br>
+
+                            Tanggal Selesai: <br>
+                            <input class="form-control" type="date" name="tanggalSelesai" th:value="*{dateEnd}" th:field="*{dateEnd}" required/>
+                            <br>
+
+                            Biaya: <br>
+                            <input class="form-control" type="number" name="biaya" th:value="*{budget}" th:field="*{budget}" required/>
+                            <br>
+
+                            <table class="table">
+                                <thead>
+                                    <th>User</th>
+                                    <th>
+                                        <button class="btn btn-outline-primary" type="submit" name="addRow">Tambah
+                                            User</button>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user, iterationStatus : *{userInTrainingPlan}">
+                                    <td>
+                                        <select name="idUser"
+                                                th:field="*{userInTrainingPlan[__${iterationStatus.index}__].userModel}"
+                                                class="form-control">
+                                            <div th:each="userExisting, iterationStatus2 : ${listUserExisting}">
+                                                <option th:value="${userExisting.accountUuid}"
+                                                        th:text="${userExisting.namaDepan} + ' ' + ${userExisting.namaBelakang}">
+                                                </option>
+                                            </div>
+                                        </select>
+                                    </td>
+                                    <input required class="form-control" type="hidden" th:field="*{userInTrainingPlan[__${iterationStatus.index}__].idTrainingPlanTakenUser}" th:value="*{userInTrainingPlan[__${iterationStatus.index}__].idTrainingPlanTakenUser}"/>
+                                    <td>
+                                        <button th:value="${iterationStatus.index}" class="btn btn-danger"
+                                                type="submit" name="deleteRow">Delete</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <a th:href="@{/training-plan/} + *{idTrainingPlan}">
+                                <input type="button" class="btn btn-secondary" value="Back">
+                            </a>
+
+                            <button class="btn btn-primary" type="submit" name="save">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+    </div>
+</body>
+
+</html>

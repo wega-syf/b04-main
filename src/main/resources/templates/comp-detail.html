@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail Training</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container Test">
+  <div class="card m-4 p-4">
+    <div class="card-body">
+      <div class="justify-content-center">
+        <div class="row">
+          <div class="col-10">
+            <h3 th:text="${competency.nama}"></h3>
+          </div>
+          <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+          <div class="col-2">
+            <a th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}" class="btn btn-sm btn-primary" th:href="@{/comp-dict/update/} + ${competency.idComp}">Update</a>
+<!--            <a class="btn btn-sm btn-danger my-1" th:href="@{/comp-dict/delete/} + ${competency.idComp}">Delete</a>-->
+            <!-- Button to trigger the modal -->
+            <button th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}" type="button" class="btn btn-sm btn-outline-danger my-1" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${competency.idComp}">
+              Delete
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" th:id="'my-modal-' + ${competency.idComp}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" th:text="'Hapus competency '+${competency.nama} +' ?'"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                    <p th:text="'Apakah yakin anda akan menghapus competency dengan nama'"></p>
+                    <p th:text="${competency.nama} + '?'"></p>
+                    <p>Anda tidak dapat mengembalikan data competency ini ini.</p>
+                  </div>
+
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" th:href="@{/comp-dict/delete/} + ${competency.idComp}" >Ya, hapus secara permanen</a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Deskripsi</div>
+          <div class="col-10" th:text="${competency.deskripsi}"></div>
+        </div>
+        <hr>
+        <h5 style="font-weight: bold">Competency Level</h5>
+        <table class="table">
+          <thead>
+          <tr>
+            <th class="text-center">Level</th>
+            <th class="text-center">Deskripsi</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="level, iterationStatus : ${competency.competencyModelList}">
+            <td th:text="${level.level}"></td>
+            <td th:text="${level.deskripsi}"></td>
+          </tr>
+          </tbody>
+        </table>
+        <br>
+        <a th:href="@{/comp-dict}"><button class="btn-hover-2 color-1">Kembali</button> </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Organization Performance Report</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Organization Performance Report</h1>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="card-body">
+        <div class="justify-content-center">
+          <div class="jumbotron">
+            <h2 class="display-4">Competency</h2>
+            <p class="lead">Laporan ini dibuat berdasarkan rerata gap dari masing-masing kompetensi pada perusahaan. Semakin tinggi nilai rerata gap pada suatu periode, maka semakin buruk pula performa pelatihan pada periode training sebelumnya.</p>
+            <hr class="my-4">
+          </div>
+
+          <div>
+            <canvas id="myChart"></canvas>
+          </div>
+          <hr class="my-4">
+
+          <p class="lead">Berikut adalah detail dari laporan ini.</p>
+
+          <div th:each="report, iterationStatus : ${mapReport}">
+            <p class="lead text-center" th:text="${report.key.nama}"></p>
+
+            <table class="table text-center" cellspacing="0" width="100%">
+              <thead>
+              <tr>
+                <th class="text-center">Periode Assessment</th>
+                <th class="text-center">Tanggal Mulai</th>
+                <th class="text-center">Jumlah Peserta</th>
+                <th class="text-center">Rerata Gap</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="compReport, iterationStatus : ${report.value}">
+                <td th:text="${compReport.eventPeriod.periodName}"></td>
+                <td th:text="${compReport.eventPeriod.dateStart}"></td>
+                <td th:text="${compReport.participants} + ' orang'"></td>
+                <td th:text="${compReport.rerataGap}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <br>
+          <a th:href="@{/report}"><button class="btn-hover-2 color-1">Kembali
+          </button> </a>
+          <a th:href="@{/report/download-excel(mode=3)}"><button class="btn-hover-2 color-1">Export to Excel
+          </button> </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+<script th:inline="javascript">
+  var chartData = /*[[${chartData}]]*/{};
+  var jsonData = JSON.parse(chartData);
+
+  var datasets = [];
+  var labels = [];
+
+  for (var key in jsonData) {
+    var dataset = jsonData[key];
+    if (dataset.labels && dataset.labels.length > 0) {
+      labels = dataset.labels; // Update labels only if present in the dataset
+    }
+    datasets.push({
+      label: key,
+      data: dataset.values,
+      borderColor: getRandomColor(),
+      fill: false
+    });
+  }
+
+  // Helper function to generate random colors
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  const ctx = document.getElementById('myChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+    <h1 class="text">Buat Akun Baru</h1>
+    <br>
+    <div class="container">
+        <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+        <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+        <div class="container">
+            <form th:action="@{/register}" th:object="${account}" method="POST">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="f-label">First Name</label>
+                        <input type="text" name="namaDepan" class="form-control mb-1" placeholder="First name" required>
+
+                        <label class="f-label">Last Name</label>
+                        <input type="text" name="namaBelakang" class="form-control mb-1" placeholder="Last Name" required>
+
+                        <label class="f-label">E-mail</label>
+                        <input type="text" name="email" class="form-control mb-1" placeholder="Email" required>
+
+                        <label class="f-label">Date of Birth</label>
+                        <input type="date" name="tanggalLahir" class="form-control mb-1" id="date"
+                            placeholder="Date of Birth" required>
+
+                        <label class="f-label">Gender</label>
+                        <select name="jenisKelamin" class="form-select mb-1" required>
+                            <option th:value='nan' disabled selected>Select Gender</option>
+                            <option th:value=1 th:text="Male"></option>
+                            <option th:value=0 th:text="Female"></option>
+                        </select>
+
+                        <label class="f-label">Phone Number</label>
+                        <input type="number" name="noTelepon" class="form-control" placeholder="Phone Number" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="f-label">Username</label>
+                        <input type="text" name="username" class="form-control mb-1" placeholder="Username" required>
+
+                        <label class="f-label">Password</label>
+                        <input type="password" name="password" class="form-control mb-1"
+                               pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+                            title="Password user mengandung angka, huruf besar, huruf kecil, dan simbol serta minimal memiliki 8 karakter"
+                            placeholder="Password" required>
+
+                        <label class="f-label">Role</label>
+                        <select name="role" class="form-select mb-1" required>
+                            <option th:value='nan' disabled selected>Select Role</option>
+                            <option th:value="admin" th:text="Admin"></option>
+                            <option th:value="executive" th:text="Executive"></option>
+                            <option th:value="assessor" th:text="Assessor"></option>
+                            <option th:value="user" th:text="User"></option>
+                        </select>
+
+                        <label class="f-label">Division</label>
+                        <select th:field="*{divisiModel.idDivisi}" class="form-select mb-1" required>
+                            <option th:each="divisi : ${listDivisi}" th:value="${divisi.idDivisi}"
+                                th:text="${divisi.nama}">
+                            </option>
+                        </select>
+
+                        <label class="f-label">Title</label>
+                        <select th:field="*{titleModel.idTitle}" class="form-select" required>
+                            <option th:each="title : ${listTitle}" th:value="${title.idTitle}" th:text="${title.nama}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class='row'>
+                    <div class="col text-end">
+                        <a th:href="@{/account-management/}"  style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn-hover-2 color-2">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

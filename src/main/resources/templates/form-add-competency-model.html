@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Competency Model</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <h2>Tambah kompetensi untuk suatu <span><i>title</i></span></h2>
+                        <br>
+                        <form th:action="@{/competency-model/add}" th:object="${competencyModel}" method="POST">
+                            Title: <br>
+                            <select name="idTitle" th:field="*{title.idTitle}" class="form-control">
+                                <div th:each="titleAvailable, iterationStatus2 : ${listTitle}">
+                                    <option th:value="${titleAvailable.idTitle}" th:text="${titleAvailable.nama}">
+                                    </option>
+                                </div>
+                            </select>
+                            <br>
+
+                            Deskripsi: <br>
+                            <input class="form-control" type="text" th:field="*{deskripsi}" required/>
+                            <br>
+
+                            <table class="table">
+                                <thead>
+                                    <th>Competency</th>
+                                    <th>Level</th>
+                                    <th>
+                                        <button class="btn btn-outline-primary" type="submit"
+                                            name="addRowCompetency">Tambah
+                                            Competency</button>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="compLevel, iterationStatus : *{listCompetencyLevel}">
+                                        <td>
+                                            <select name="idComp"
+                                                th:field="*{listCompetencyLevel[__${iterationStatus.index}__].idCompetency}"
+                                                class="form-control">
+                                                <div
+                                                    th:each="competencyExisting, iterationStatus2 : ${listCompetencyExisting}">
+                                                    <option th:value="${competencyExisting.idComp}"
+                                                        th:text="${competencyExisting.nama}"></option>
+                                                </div>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" type="number" min="1" max="5"
+                                                th:field="*{listCompetencyLevel[__${iterationStatus.index}__].level}" required/>
+                                        </td>
+                                        <td>
+                                            <button th:value="${iterationStatus.index}" class="btn btn-danger"
+                                                type="submit" name="deleteRowCompetency">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a th:href="@{/competency-model}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+                            <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

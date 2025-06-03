@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link href="css/style-login.css" rel="stylesheet" type="text/css">
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
+    type='text/css'>
+
+  <!-- Box Icon link-->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body>
+  <section>
+    <div class="container4">
+      <div class="wrapper">
+        <H1>Login</H1>
+        <form th:action="@{/login}" method="POST">
+          <div class="inputbox">
+            <div>
+              <input type="username" name="username" aria-describedby="userHelp" required>
+              <label for="">Username</label>
+            </div>
+          </div>
+          <div class="inputbox">
+            <div>
+              <input type="password" name="password" required >
+              <label for="">Password</label>
+            </div>
+          </div>
+          <div th:if="${param.error}" class="mb-3">
+            <label style="color: red">Invalid username and password.</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+          </div>
+          <button type="submit" class="btn btn-light d-grid gap-2 col-9 mx-auto" style="border-radius: 80px; font-weight: 500;">Login</button>
+        </form>
+      </div>
+      <div class="wave water"></div>
+      <div class="wave water"></div>
+      <div class="wave water"></div>
+      <div class="wave water"></div>
+    </div>
+  </section>
+    <!-- <section>
+      <div class="wave water"></div>
+    </section> -->
+</body>
+
+</html>

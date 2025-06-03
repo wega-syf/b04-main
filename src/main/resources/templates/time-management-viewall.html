@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Time Management: List Event</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Time Management</h1>
+  <div style="margin-left: 43px;">
+    <h3 >List Event</h3>
+
+    <a th:href="@{/time-management/add}">
+      <button class="btn-hover" th:classappend="'color-1'">+ Add Event Period</button></a>
+    <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+    <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+
+  </div>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="justify-content-center">
+        <h2>Currently Active Event</h2>
+        <br>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Nama Periode</div>
+          <div class="col-10" th:text="${eventActive.periodName}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Jenis</div>
+          <div class="col-10" th:text="${eventActive.jenis}"></div>
+        </div>
+        <div class="row">
+        <div class="col-2" style="font-weight: bold">Tanggal Mulai</div>
+          <div class="col-10" th:text="${#temporals.format(eventActive.dateStart, 'dd MMMM yyyy')}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Tanggal Selesai</div>
+          <div class="col-10" th:text="${#temporals.format(eventActive.dateEnd, 'dd MMMM yyyy')}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Deskripsi</div>
+          <div class="col-10" th:text="${eventActive.deskripsi}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="card-body">
+        <div class="justify-content-center">
+
+          <h3>Inactive Event</h3>
+          <br>
+
+          <table class="table table-paginate">
+            <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Nama Periode</th>
+              <th class="text-center">Jenis</th>
+              <th class="text-center">Tanggal Mulai</th>
+              <th class="text-center">Tanggal Selesai</th>
+              <th class="text-center">Deskripsi</th>
+              <th class="text-center">Active?</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="event, iterationStatus : ${eventPeriodList}">
+            <tr >
+              <td th:text="${iterationStatus.count}" class="text-center"></td>
+              <td >
+                <p class="text-center" th:text="${event.periodName}"></p>
+              </td>
+              <td class="text-center" th:text="${event.jenis}"></td>
+              <td class="text-center" th:text="${#temporals.format(event.dateStart, 'dd MMMM yyyy')}"></td>
+              <td class="text-center" th:text="${#temporals.format(event.dateEnd, 'dd MMMM yyyy')}"></td>
+              <td class="text-center" th:text="${event.deskripsi}"></td>
+              <td class="text-center">
+                <button th:unless="${event.isActive == true}" type="button" class="btn-hover color-1" data-bs-toggle="modal" th:data-bs-target="'#my-modal-' + ${event.idEventPriod}">
+                  Activate
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" th:id="'my-modal-' + ${event.idEventPriod}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="'Aktivasi event \''+${event.periodName} +'\' ?'"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <!-- Modal Body -->
+                      <div class="modal-body">
+                        <p th:text="'Apakah yakin anda akan mengaktifkan event'"></p>
+                        <p th:text="${event.periodName}"></p>
+                        <p>Note:</p>
+                        <p>Anda akan menonaktifkan SEMUA event lainnya.</p>
+                        <p>Sebagai unsur keamanan, akun Anda juga akan ter-logout</p>
+                        <p>Gunakan opsi ini hanya jika opsi otomatis tidak berfungsi</p>
+                      </div>
+
+                      <!-- Modal Footer -->
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <a th:href="@{/time-management/activate/} + ${event.idEventPriod}"><button class="btn btn-danger">Ya, aktifkan event ini dan non-aktifkan semua event lain, serta log out</button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+
+            </tr>
+
+            </div>
+
+            </tbody>
+          </table>
+<!--          <a th:href="@{/review/}"><button class="btn-hover-2 color-1">Kembali</button> </a>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Review Competency Assessment</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Review Competency Assessment</h1>
+  <div style="margin-left: 43px;">
+    <h5 th:text="'Hasil Review ' + ${username}"></h5>
+  </div>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="card-body">
+        <div class="justify-content-center">
+          <table class="table table-paginate">
+            <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Competency</th>
+              <th class="text-center">Target Nilai</th>
+              <th class="text-center">Rerata Nilai</th>
+              <th class="text-center">Rerata Gap</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review, iterationStatus : ${listReview}">
+              <td th:text="${iterationStatus.count}" class="text-center"></td>
+              <!--              <td>-->
+              <!--                <a th:text="${review.competencyLevel.idCompetency.nama}"-->
+              <!--                   th:href="#"-->
+              <!--                   style="color: black;"-->
+              <!--                   onpointerenter="this.setAttribute('style', 'color: purple;')"-->
+              <!--                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>-->
+              <!--              </td>-->
+              <td th:text="${review.competencyLevel.idCompetency.nama}"></td>
+              <td class="text-center" th:text="${review.competencyLevel.level}"></td>
+              <td class="text-center" th:text="${review.competencyLevel.level + review.rerataGap}"></td>
+              <td class="text-center" th:text="${review.rerataGap}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <a th:href="@{/review/list-user(idEventPriod=${eventPeriod.idEventPriod})}"><button class="btn-hover-2 color-1">Kembali
+          </button> </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

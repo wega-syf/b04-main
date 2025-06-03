@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+
+    <div class="Test" style="display: table;">
+        <div class="container" style="display: table-row;">
+            <h1 class="text">Profile</h1>
+            <div>
+                <div class="kotak-1">
+                    <img src="profile.png" alt="">
+                    <div class="isi">
+                        <div class="bagian">
+                            <h4>Username</h4>
+                            <p class="" th:text="${akun.getUsername}"></p>
+                        </div>
+                        <div class="bagian">
+                            <h4>Nama Depan</h4>
+                            <p class="" th:text="${akun.getNamaDepan}"></p>
+                        </div>
+                        <div class="bagian">
+                            <h4>Nama Belakang</h4>
+                            <p class="" th:text="${akun.getNamaBelakang}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="kotak-2" style="display: table-cell;">
+                    <div class="isi">
+                        <div class="bagian">
+                            <h4>Email</h4>
+                            <p class="" th:text="${akun.getEmail}"></p>
+                        </div>
+                        <div class="bagian">
+                            <h4>Jenis Kelamin</h4>
+                            <div th:if="${akun.getJenisKelamin.toString().equals('false')}">
+                                <p>Male</p>
+                            </div>
+                            <div th:if="${akun.getJenisKelamin.toString().equals('true')}">
+                                <p>Female</p>
+                            </div>
+                        </div>
+                        <div class="bagian">
+                            <h4>No Telepon</h4>
+                            <p class="" th:text="'+62'+${akun.getNoTelepon}"></p>
+                        </div>
+                        <div class="bagian">
+                            <h4>Role</h4>
+                            <p class="" th:text="${akun.getRole}"></p>
+                        </div>
+                        <div class="bagian">
+                            <h4>Tanggal Lahir</h4>
+                            <p class="" th:text="${akun.getTanggalLahir}"></p>
+                        </div>
+                        <a th:href="@{profile/edit/{uuid}(uuid=${akun.getAccountUuid})}">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" style="margin-bottom: 20px;">
+                                Edit
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

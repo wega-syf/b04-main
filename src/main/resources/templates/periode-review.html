@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Periode Review</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Pilih Periode Assessment</h1>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="card-body">
+        <div class="justify-content-center">
+          <table class="table table-paginate">
+            <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Nama Periode</th>
+              <th class="text-center">Tanggal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event, iterationStatus : ${listEventPeriod}">
+              <td th:text="${iterationStatus.count}" class="text-center"></td>
+              <td class="text-center" th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}">
+                <a th:text="${event.periodName}"
+                   th:href="@{/review/list-user(idEventPriod=${event.idEventPriod})}"
+                   style="color: black;"
+                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+              </td>
+              <td class="text-center" th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('assessor')}">
+                <a th:text="${event.periodName}"
+                   th:href="@{/review/list-user(idEventPriod=${event.idEventPriod})}"
+                   style="color: black;"
+                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+              </td>
+              <td class="text-center" th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('user')}">
+                <a th:text="${event.periodName}"
+                   th:href="@{/review/me(idEventPriod=${event.idEventPriod})}"
+                   style="color: black;"
+                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+              </td>
+              <td class="text-center" th:text="${#temporals.format(event.dateStart, 'dd MMMM yyyy')}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

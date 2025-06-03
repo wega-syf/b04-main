@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Organization Performance Report</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+    <h1 class="text">Pilih Mode Report</h1>
+    <div class="container">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+                <div class="justify-content-center">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" th:src="@{/mode1.png}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">All Employee</h5>
+                                    <p class="card-text">Lihat laporan dari keseluruhan karyawan pada perusahaan.</p>
+                                    <a th:href="@{/report/all}" class="btn btn-primary">Pilih</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" th:src="@{/mode2.png}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Divisional</h5>
+                                    <p class="card-text">Lihat laporan berdasarkan divisi pada perusahaan</p>
+                                    <a th:href="@{/report/divisional}" class="btn btn-primary">Pilih</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" th:src="@{/mode3.png}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Competency</h5>
+                                    <p class="card-text">Lihat laporan berdasarkan kompetensi pada perusahaan</p>
+                                    <a th:href="@{/report/competency}" class="btn btn-primary">Pilih</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

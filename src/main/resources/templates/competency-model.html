@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Competency Model</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <h1 class="text">Competency Model</h1>
+        <div style="margin-left: 43px;">
+            <h5>Kompetensi yang dibutuhkan oleh masing-masing <span><i>title</i></span></h5>
+            <br>
+            <a th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}"
+               th:href="@{/competency-model/add}"><button class="btn-hover"
+                    th:classappend="'color-1'">+ Add Competency</button></a>
+        </div>
+        <div th:if="${successtext}" th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+        <div th:if="${errortext}" th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="">Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="competencyModel, iterationStatus : ${listCompetencyModel}">
+                                <td th:text="${competencyModel.idModel}" class="text-center"></td>
+                                <td>
+                                    <a th:text="${competencyModel.title.nama}"
+                                        th:href="@{/competency-model/} + ${competencyModel.idModel}"
+                                        style="color: black;"
+                                        onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                        onpointerleave="this.setAttribute('style', 'color: black;')"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Training Plan</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <h1 class="text">Training Plan</h1>
+        <div style="margin-left: 43px;">
+            <br>
+            <div th:if="${activeTrainingPeriod}">
+
+                <a th:if="${#authorization.getAuthentication().getAuthorities()[0].getAuthority().toString().equals('admin')}"
+                th:href="@{/training-plan/add}"><button class="btn-hover" th:classappend="'color-1'">+ Add
+                    Training</button></a>
+            </div>
+        </div>
+        <div th:if="${successtext}"
+            th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+        <div th:if="${errortext}" th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <table class="table table-paginate">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="">Nama</th>
+                                <th class="">Training</th>
+                                <th class="">Tanggal Mulai</th>
+                                <th class="">Tanggal Selesai</th>
+                                <th class="">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="trainingPlan, iterationStatus : ${listTrainingPlan}">
+                                <td th:text="${iterationStatus.count}" class="text-center"></td>
+                                <td>
+                                    <a th:text="${trainingPlan.nama}"
+                                        th:href="@{/training-plan/} + ${trainingPlan.idTrainingPlan}"
+                                        style="color: black;"
+                                        onpointerenter="this.setAttribute('style', 'color: purple;')"
+                                        onpointerleave="this.setAttribute('style', 'color: black;')"></a>
+                                </td>
+                                <td th:text="${trainingPlan.idTraining.nama}"></td>
+                                <td th:text="${#temporals.format(trainingPlan.dateStart, 'dd MMMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(trainingPlan.dateEnd, 'dd MMMM yyyy')}"></td>
+                                <div th:switch="${trainingPlan.status}">
+                                    <td th:case="1"><p class="status1">Confirmed</p></td>
+                                    <td th:case="2"><p class="status2">Active</p></td>
+                                    <td th:case="3"><p class="status3">Done</p></td>
+                                    <!-- * for default case -->
+                                    <td th:case="*"><p class="status0">In Review</p></td>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+</body>
+
+</html>

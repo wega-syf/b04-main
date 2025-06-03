@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8">
+    <title>Training Plan</title>
+    <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="Test">
+        <div class="container">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <h2>Tambah user untuk suatu Training</h2>
+                        <br>
+                        <h4 th:text="'Periode assessment: '+${eventPeriod.periodName}"></h4>
+                        <br>
+                        <div class="row">
+                            <div class="col-2">
+                                <p>Tanggal periode dimulai:</p>
+                                <p>Tanggal periode selesai:</p>
+                            </div>
+                            <div class="col-10">
+                                <p th:text="${#temporals.format(eventPeriod.dateStart, 'dd MMMM yyyy')}"></p>
+                                <p th:text="${#temporals.format(eventPeriod.dateEnd, 'dd MMMM yyyy')}"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <form th:action="@{/training-plan/add}" th:object="${trainingPlanModel}" method="POST">
+
+                            Training: <br>
+                            <select name="idTraining" th:field="*{idTraining.trainingId}" class="form-control">
+                                <div th:each="trainingAvailable, iterationStatus2 : ${listTraining}">
+                                    <option th:value="${trainingAvailable.trainingId}"
+                                        th:text="${trainingAvailable.nama}">
+                                    </option>
+                                </div>
+                            </select>
+                            <br>
+
+                            Nama: <br>
+                            <input class="form-control" type="text" th:field="*{nama}" required/>
+                            <br>
+
+                            Deskripsi: <br>
+                            <input class="form-control" type="text" th:field="*{deskripsi}" required/>
+                            <br>
+
+                            Tanggal Mulai: <br>
+                            <input class="form-control" type="date" th:field="*{dateStart}" required/>
+                            <br>
+
+                            Tanggal Selesai: <br>
+                            <input class="form-control" type="date" th:field="*{dateEnd}" required/>
+                            <br>
+
+                            Biaya: <br>
+                            <input class="form-control" type="number" th:field="*{budget}" required/>
+                            <br>
+
+                            <table class="table">
+                                <thead>
+                                    <th>User</th>
+                                    <th>
+                                        <button class="btn btn-outline-primary" type="submit" name="addRowUser">Tambah
+                                            User</button>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user, iterationStatus : *{userInTrainingPlan}">
+                                        <td>
+                                            <select name="idUser"
+                                                th:field="*{userInTrainingPlan[__${iterationStatus.index}__].userModel}"
+                                                class="form-control">
+                                                <div th:each="userExisting, iterationStatus2 : ${listUserExisting}">
+                                                    <option th:value="${userExisting.accountUuid}"
+                                                        th:text="${userExisting.namaDepan} + ' ' + ${userExisting.namaBelakang}">
+                                                    </option>
+                                                </div>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button th:value="${iterationStatus.index}" class="btn btn-danger"
+                                                type="submit" name="deleteRowTraining">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <a th:href="@{/training-plan}" style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+                            <button class="btn-hover-2 color-2 btn-primary" type="submit" name="save">Submit</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>

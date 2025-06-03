@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Assessment</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Detail Assessment</h1>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="justify-content-center">
+        <h2>Data Assesment</h2>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Periode</div>
+          <div class="col-10" th:text="${assessmentModel.event.periodName}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Tanggal</div>
+          <div class="col-10" th:text="${#temporals.format(assessmentModel.date, 'dd MMMM yyyy')}"></div>
+        </div>
+
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Id</div>
+          <div class="col-10" th:text="${assessmentModel.idAssess}"></div>
+        </div>
+        <br>
+
+        <h2>Data User yang  di Assess</h2>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Nama Lengkap</div>
+          <div class="col-10" th:text="${assessmentModel.user.namaDepan} + ' '+ ${assessmentModel.user.namaBelakang}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Jenis Kelamin</div>
+          <div class="col-10" th:text="${assessmentModel.user.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Divisi</div>
+          <div class="col-10" th:text="${assessmentModel.user.divisiModel.nama}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Title</div>
+          <div class="col-10" th:text="${assessmentModel.user.titleModel.nama}"></div>
+        </div>
+        <h2>Data Assessor</h2>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Nama Lengkap</div>
+          <div class="col-10" th:text="${assessmentModel.assessor.namaDepan} + ' '+ ${assessmentModel.assessor.namaBelakang}"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Jenis Kelamin</div>
+          <div class="col-10" th:text="${assessmentModel.assessor.jenisKelamin} ? 'Laki-laki' : 'Perempuan'"></div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="font-weight: bold">Title</div>
+          <div class="col-10" th:text="${assessmentModel.assessor.titleModel.nama}"></div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="card m-2 p-4">
+      <div th:if="${successtext} " th:replace="fragments/fragment :: alert-success-fragment(successtext=${successtext})"></div>
+      <div th:if="${errortext} " th:replace="fragments/fragment :: alert-error-fragment(errortext=${errortext})"></div>
+      <div class="card-body">
+        <div class="justify-content-center">
+
+            <div class="row">
+              <strong>
+                Catatan singkat terkait performa user ini selama periode assessment:
+              </strong>
+            </div>
+           <div class="row">
+             <p th:text="${assessmentModel.note}"></p>
+           </div>
+
+            <br>
+
+            <table class="table">
+              <thead>
+              <tr>
+                <th class="text-center">Competency</th>
+                <th class="text-center">Level yang di dapat </th>
+                <th class="text-center">Level seharusnya </th>
+
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr  class="text-center" th:each="assessmentLevel, iterationStatus : ${assessmentModel.getListAssessment()}" >
+                <td>
+                  <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" th:id="'panelsStayOpen-headingOne' + ${iterationStatus.index}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#panelsStayOpen-collapseOne'+${iterationStatus.index}" aria-expanded="false" th:aria-controls="'panelsStayOpen-collapseOne' + ${iterationStatus.index}" th:text="${assessmentLevel.competencyLevel.idCompetency.nama}">
+                        </button>
+                      </h2>
+                      <div th:id="'panelsStayOpen-collapseOne' + ${iterationStatus.index}" class="accordion-collapse collapse" th:aria-labelledby="'panelsStayOpen-headingOne'+${iterationStatus.index}">
+                        <div class="accordion-body" >
+                          <div class="row">
+                            <div class="col-2"> <strong>Deskripsi Kompetensi </strong> </div>
+                            <div class="col-10">
+                              <p th:text="${assessmentLevel.competencyLevel.idCompetency.deskripsi}"></p>
+                            </div>
+                          </div>
+                          <br>
+
+                          <div th:each="levelComp,iter : ${assessmentLevel.competencyLevel.idCompetency.competencyModelList}">
+                            <div class="row">
+                              <div class="col-2"> <strong th:text="'Level '+${levelComp.level} +':'"></strong>  </div>
+                              <div class="col-10">
+                                <p th:text="${levelComp.deskripsi}"></p>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <p th:text="${assessmentLevel.result}"> </p>
+                </td>
+                <td >
+                  <p th:text="${assessmentLevel.competencyLevel.level}"> </p>
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+            <tr>
+              <a th:href="@{/history-assessment}"
+                 style="text-decoration:none"><button class="btn-hover-2 color-1" type="button">Kembali</button></a>
+            </tr>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+</html>

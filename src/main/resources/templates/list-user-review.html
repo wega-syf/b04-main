@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Review Competency Assessment</title>
+  <object th:include="fragments/fragment :: requirement" th:remove="tag"></object>
+
+</head>
+
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="Test">
+  <h1 class="text">Review Competency Assessment</h1>
+  <div style="margin-left: 43px;">
+    <h5>List user</h5>
+  </div>
+  <div class="container">
+    <div class="card m-4 p-4">
+      <div class="card-body">
+        <div class="justify-content-center">
+          <table class="table table-paginate">
+            <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Username</th>
+              <th class="text-center">Nama</th>
+              <th class="text-center">Title</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, iterationStatus : ${listUser}">
+              <td th:text="${iterationStatus.count}" class="text-center"></td>
+              <td class="text-center">
+                <a th:text="${user.username}"
+                   th:href="@{/review/user/} + ${user.username} + '?idEventPriod=' + ${eventPeriod.idEventPriod}"
+                   style="color: black;"
+                   onpointerenter="this.setAttribute('style', 'color: purple;')"
+                   onpointerleave="this.setAttribute('style', 'color: black;')" ></a>
+              </td>
+              <td class="text-center" th:text="${user.namaDepan} + ' ' + ${user.namaBelakang}"></td>
+              <td class="text-center" th:text="${user.titleModel.nama}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <a th:href="@{/review/}"><button class="btn-hover-2 color-1">Kembali
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/fragment :: scripts" th:remove="tag"></div>
+
+</body>
+
+</html>
